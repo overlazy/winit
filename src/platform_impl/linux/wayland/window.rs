@@ -78,7 +78,9 @@ impl Window {
                 WEvent::Configure { new_size, states } => {
                     let mut store = window_store.lock().unwrap();
                     let is_fullscreen = states.contains(&WState::Fullscreen);
+                    // It should likely be done here, I think
 
+                    // So if a user dicided to `decorate` then we should
                     for window in &mut store.windows {
                         if window.surface.as_ref().equals(&my_surface.as_ref()) {
                             window.newsize = new_size;
@@ -299,7 +301,6 @@ impl Window {
     pub fn fullscreen(&self) -> Option<Fullscreen> {
         if *(self.fullscreen.lock().unwrap()) {
             Some(Fullscreen::Borderless(RootMonitorHandle {
-                // TODO - check this place for decorate settings
                 inner: PlatformMonitorHandle::Wayland(self.current_monitor()),
             }))
         } else {

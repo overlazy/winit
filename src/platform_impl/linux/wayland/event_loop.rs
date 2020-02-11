@@ -90,7 +90,7 @@ pub struct CursorManager {
     locked_pointers: Vec<ZwpLockedPointerV1>,
     cursor_visible: bool,
     current_cursor: CursorIcon,
-    scale_factor: u32
+    scale_factor: u32,
 }
 
 impl CursorManager {
@@ -203,7 +203,6 @@ impl CursorManager {
             let _ = pointer.set_cursor_with_scale(cursor, self.scale_factor, None);
         }
     }
-
 
     // This function can only be called from a thread on which `pointer_constraints_proxy` event
     // queue is located, so calling it directly from a Window doesn't work well, in case
@@ -737,7 +736,12 @@ impl<T> EventLoop<T> {
 
                 if let Some(dpi) = window.new_dpi {
                     // Update cursor dpi factor
-                    {  self.cursor_manager.lock().unwrap().update_scale_factor(dpi as u32);};
+                    {
+                        self.cursor_manager
+                            .lock()
+                            .unwrap()
+                            .update_scale_factor(dpi as u32);
+                    };
                     let dpi = dpi as f64;
                     let logical_size = LogicalSize::<f64>::from(*window.size);
                     let mut new_inner_size = logical_size.to_physical(dpi);
