@@ -299,6 +299,7 @@ impl Window {
     pub fn fullscreen(&self) -> Option<Fullscreen> {
         if *(self.fullscreen.lock().unwrap()) {
             Some(Fullscreen::Borderless(RootMonitorHandle {
+                // TODO - check this place for decorate settings
                 inner: PlatformMonitorHandle::Wayland(self.current_monitor()),
             }))
         } else {
